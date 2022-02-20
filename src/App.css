@@ -1,0 +1,31 @@
+.misna-word{
+  padding: 0 6px;
+}
+body{
+  direction: rtl;
+}
+textarea {
+  min-height: 400px;
+}
+.misna-word{
+  margin: 0 3px;
+  display: inline-flex;
+}
+
+.misna-row{
+  margin: 10px 0;
+}
+.list-group{
+  margin: 30px 0;
+  flex-direction: unset;
+  display: flex;
+}
+.list-group-item{
+  margin: 0 4px;
+}
+.btn-block{
+  width: 100%;
+}
+.results-title {
+  
+}
