@@ -73,7 +73,6 @@ class App extends Component {
   onDisplayResults() { 
      this.setState({displayResults: !this.state.displayResults});
      localStorage.setItem('misnaDataHash', JSON.stringify(this.state.misnaDataHash));
-     console.log(this.state.misnaDataHash, 'misnaDataHash');
   }
   renderMisnaRows(){
     const misnaRows = this.state.misnaDataHash;
@@ -118,20 +117,39 @@ class App extends Component {
     return this.state.misnaDataHash.map((row) => {
       const rowByTextsTypes = this.getSingleResultRow(row);
       return (
-        <ul className="col">
+        <div className="col-md-3">
           {this.renderResultsRow(rowByTextsTypes)}
-        </ul>
+        </div>
       );
     });
   }
   renderResultsRow(rowByTextsTypes){
     console.log('sss', rowByTextsTypes)
-    // return rowByTextsTypes.map((item) => {
-    //   return <li className={"list-group-item list-group-item-" + item.type}>{item.text}</li>
-    // })
-    return rowByTextsTypes.map((item) => {
-      return <div className={"row results-" + item.type}>{item.text}</div>
+    const rowResults = [];
+    const isLastRow = rowByTextsTypes.length - 1;
+    rowByTextsTypes.forEach((item, i) => {
+      switch (item.type) {
+        case 'title':
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+           {item.text}
+          </button>)
+          break;
+        case 'case':
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+            {item.text}
+          </button>)
+          break;
+        default:
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+          {item.text}
+        </button>)
+          break;
+      }
+      if (i !== isLastRow) { // Last row
+        rowResults.push(<img className="arrow-icon middle" src="./images/Down_Arrow_Icon.png"/>);
+      }
     })
+    return rowResults;
   }
   getSingleResultRow(row){
     let text = '';
@@ -140,10 +158,7 @@ class App extends Component {
     // row.forEach((word, i) => {
 
       row.forEach((word) => {
-        rowByTextsTypes.push({
-          type: word.type,
-          text: word.text
-        });
+        rowByTextsTypes.push(word);
       });
       // text += (" " + word.text);
       
@@ -194,11 +209,13 @@ class App extends Component {
       <div className="col-md-12">
         {this.renderOptions()}
       </div>
-      <div className="col-md-12 text-center" style={{margin: '10px 0'}}>
-        <button className="btn btn-lg btn-block btn-success" 
-            onClick={this.onDisplayResults}>
-            הצג תוצאות
-        </button>
+      <div className="row">
+        <div className="col-md-12" style={{margin: '20px 0'}}>
+          <button className="btn btn-lg btn-block btn-success" 
+              onClick={this.onDisplayResults}>
+              הצג תוצאות
+          </button>
+        </div>
         { this.state.displayResults && this.renderResults()}
       </div>
     </div>);

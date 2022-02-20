@@ -15,17 +15,22 @@ textarea {
 .misna-row{
   margin: 10px 0;
 }
-.list-group{
-  margin: 30px 0;
-  flex-direction: unset;
-  display: flex;
-}
-.list-group-item{
-  margin: 0 4px;
-}
 .btn-block{
   width: 100%;
 }
 .results-title {
   
+}
+.results-case {
+  border-radius: 75px;
+  width: 150px;
+  height: 150px;
+  overflow: auto;
+}
+.arrow-icon {
+  height: 30px;
+}
+.middle{
+  margin: 0 auto;
+  display: block;
 }
