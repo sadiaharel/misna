@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import './App.css';
+import './styles/App.scss';
 
 class App extends Component {
   constructor(props){
@@ -9,11 +10,11 @@ class App extends Component {
     this.defineColorToWord = this.defineColorToWord.bind(this);
     this.onDisplayResults = this.onDisplayResults.bind(this);
     this.types = {
-      title: {color: 'primary', name: "כותרת"},
-      role: {color: 'danger', name: "דין"},
-      reason: {color: 'info', name: "טעם"},
-      case: {color: 'success', name: "מקרה"},
-      man: {color: 'warning', name: "אומר"},
+      title: {color: 'warning', name: "כותרת"},
+      man: {color: 'danger', name: "אומר"},
+      case: {color: 'info', name: "מקרה"},
+      role: {color: 'success', name: "דין"},
+      reason: {color: 'primary', name: "טעם"},
     };
     this.state = {
       displayResults: false,
@@ -79,7 +80,7 @@ class App extends Component {
     return misnaRows.map((row, i) => {
       return (<div className="misna-row" key={'row' + i}>
         {this.renderMisnaWords(row, i)}
-      </div>)
+      </div>);
     });
   }
   /**
@@ -106,7 +107,7 @@ class App extends Component {
     for (let key in this.types) {
         let item = this.types[key];
         options.push(<button key={key}
-          className={"btn btn-lg btn-" + item.color}
+          className={"btn btn-option btn-lg btn-" + item.color}
           onClick={() => this.defineColorToWord(key)}>
           {item.name}
         </button>)
@@ -117,7 +118,7 @@ class App extends Component {
     return this.state.misnaDataHash.map((row) => {
       const rowByTextsTypes = this.getSingleResultRow(row);
       return (
-        <div className="col-md-3">
+        <div className="col-md-2 misna-row-results">
           {this.renderResultsRow(rowByTextsTypes)}
         </div>
       );
@@ -128,84 +129,53 @@ class App extends Component {
     const rowResults = [];
     const isLastRow = rowByTextsTypes.length - 1;
     rowByTextsTypes.forEach((item, i) => {
+      if (item.text.length == 0) { return; } // Empty row
+      
       switch (item.type) {
         case 'title':
-          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-btn results-" + item.type}>
            {item.text}
           </button>)
           break;
         case 'case':
-          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-btn results-" + item.type}>
             {item.text}
           </button>)
           break;
         default:
-          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-" + item.type}>
+          rowResults.push(<button className={"btn btn-" + item.color +  " middle results-btn results-" + item.type}>
           {item.text}
         </button>)
           break;
       }
       if (i !== isLastRow) { // Last row
-        rowResults.push(<img className="arrow-icon middle" src="./images/Down_Arrow_Icon.png"/>);
+        rowResults.push(<img className="arrow-icon middle img-fluid" src="./images/arrow-down.svg"/>);
       }
     })
     return rowResults;
   }
   getSingleResultRow(row){
-    let text = '';
     const rowByTextsTypes = [];
     console.log('row', row)
-    // row.forEach((word, i) => {
-
       row.forEach((word) => {
         rowByTextsTypes.push(word);
       });
-      // text += (" " + word.text);
-      
-    // });
-    return rowByTextsTypes;
-  }  
-  getSingleResultRowOld(row){
-    let text = '';
-    const rowByTextsTypes = [];
-    console.log('row', row)
-    row.forEach((word, i) => {
-      let prevType = row[i-1] && row[i-1].type;
-      // console.log('prevType', prevType)
-      // console.log('text', text, word, prevType === word.type)
-      let isLastRow = (i === row.length -1);
-      if (prevType && prevType !== word.type || isLastRow) {
-        if (isLastRow) {
-          text += (" " + word.text);
-        }
-        let rowTexts = text.split(',');
-        rowTexts.forEach((item) => {
-          rowByTextsTypes.push({
-            type: prevType,
-            text: item
-          });
-        });
-        text = "";
-      } 
-      text += (" " + word.text);
-      
-    });
     return rowByTextsTypes;
   }
   render() {
     console.log('this.state.displayResult', this.state.displayResult)
     return(<div className="container">
       <br></br>
-      <h1>הכנס משנה</h1>
+      <h1 className="text-success info-header">הכנס משנה</h1>
       <div className="col-md-12">
         <textarea rows="10" className="form-control" onChange={this.onMisnaChange} defaultValue={this.state.misnaText || ''}></textarea>
       </div>
-      <h2>מיין משנה</h2>
+      <h2 className="text-primary info-header">מיין משנה</h2>
       <div className="col-md-12">
         {this.renderOptions()}
       </div>
       <div className="col-md-12">{this.renderMisnaRows()}</div>
-      <h2>מקרא</h2>
+      <h2 className="text-info info-header">מקרא</h2>
       <div className="col-md-12">
         {this.renderOptions()}
       </div>
